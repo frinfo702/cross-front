@@ -13,10 +13,16 @@ import {
     ResponsiveContainer,
 } from "recharts";
 
+/**
+ * 以前のようなタブ切り替えではなく、
+ * Stripe Dashboard 風にサイドバー or シンプル上部ナビを用意して
+ * 中身だけ切り替える、というイメージでもOK。
+ * ここでは中央に大きめのカードを置くデザイン例を示すわ。
+ */
 export default function CompanyDashboard() {
-    // ---------------------------------
+    // ------------------------------------------------
     // 状態管理
-    // ---------------------------------
+    // ------------------------------------------------
     const [currentTab, setCurrentTab] = useState<"myJobs" | "createJob" | "analytics">("myJobs");
     const [embedCode, setEmbedCode] = useState<string | null>(null);
 
@@ -57,164 +63,137 @@ export default function CompanyDashboard() {
         setEmbedCode(code);
     };
 
-    // ジョブ作成(ダミー)
+    // Job作成(ダミー)
     const handleCreateJob = (e: React.FormEvent) => {
         e.preventDefault();
         alert("新規Jobを作成しました！（Stripe課金イメージ）");
     };
 
+    // ------------------------------------------------
+    // JSX描画
+    // ------------------------------------------------
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900">
-            {/* --- ヘッダー部分 --- */}
-            <header className="bg-white shadow-sm">
-                <div className="flex items-center justify-between px-5 py-4 max-w-6xl mx-auto">
-                    {/* 左側タイトル */}
+        <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+            {/* ヘッダー部分 */}
+            <header className="w-full bg-white border-b shadow-sm">
+                <div className="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+                    {/* 左側ロゴなど（Stripeダッシュボード風にシンプルに） */}
                     <div className="flex items-center space-x-2">
-                        {/* 戻る矢印ダミー */}
-                        <button className="w-6 h-6 text-gray-600 hover:text-gray-800">
-                            <svg
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                                viewBox="0 0 24 24"
-                                className="w-full h-full"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <h1 className="text-xl font-bold text-gray-800">
-                            Cross Job Management
-                        </h1>
+                        <div className="text-xl font-bold tracking-tight text-indigo-600">
+                            Cross Dashboard
+                        </div>
                     </div>
-                    {/* 右側サポートダミー */}
-                    <button className="text-sm text-gray-600 hover:text-gray-800">
-                        Support
-                    </button>
+
+                    {/* 右側：タブ切り替え or シンプルナビ */}
+                    <nav className="flex space-x-4">
+                        <button
+                            onClick={() => setCurrentTab("myJobs")}
+                            className={`${currentTab === "myJobs"
+                                    ? "text-indigo-600 font-semibold"
+                                    : "text-gray-600 hover:text-gray-800"
+                                }`}
+                        >
+                            My Jobs
+                        </button>
+                        <button
+                            onClick={() => setCurrentTab("createJob")}
+                            className={`${currentTab === "createJob"
+                                    ? "text-indigo-600 font-semibold"
+                                    : "text-gray-600 hover:text-gray-800"
+                                }`}
+                        >
+                            Create Job
+                        </button>
+                        <button
+                            onClick={() => setCurrentTab("analytics")}
+                            className={`${currentTab === "analytics"
+                                    ? "text-indigo-600 font-semibold"
+                                    : "text-gray-600 hover:text-gray-800"
+                                }`}
+                        >
+                            Analytics
+                        </button>
+                    </nav>
                 </div>
             </header>
 
-            {/* --- サブヘッダー(説明) --- */}
-            <div className="px-5 max-w-6xl mx-auto mt-2 text-gray-500 text-sm">
-                The next generation platform to manage your job listings, create new ones, and analyze performance.
-            </div>
+            {/* メインコンテンツ */}
+            <main className="flex-grow">
+                {/* 中央寄せコンテナ */}
+                <div className="max-w-4xl mx-auto py-10 px-4">
+                    {currentTab === "myJobs" && (
+                        <section className="bg-white rounded-lg shadow p-6">
+                            <h2 className="text-2xl font-semibold text-gray-700 mb-4">My Jobs</h2>
+                            {jobs.map((job) => (
+                                <div
+                                    key={job.id}
+                                    className="flex items-center justify-between p-4 rounded-md bg-gray-50 mb-3"
+                                >
+                                    <div>
+                                        <p className="font-medium text-gray-800">{job.title}</p>
+                                        <p className="text-sm text-gray-500">Status: {job.status}</p>
+                                        <p className="text-sm text-gray-500">Applicants: {job.applicants}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => handleGenerateEmbedCode(job.id)}
+                                        className="px-4 py-2 rounded bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500"
+                                    >
+                                        Generate Embed Code
+                                    </button>
+                                </div>
+                            ))}
+                        </section>
+                    )}
 
-            {/* --- タブ切り替えナビ --- */}
-            <nav className="flex gap-2 mt-4 px-5 max-w-6xl mx-auto">
-                {["myJobs", "createJob", "analytics"].map((tab) => {
-                    const isActive = currentTab === tab;
-                    const label =
-                        tab === "myJobs"
-                            ? "My Jobs"
-                            : tab === "createJob"
-                                ? "Create Job"
-                                : "Analytics";
-
-                    return (
-                        <button
-                            key={tab}
-                            onClick={() => setCurrentTab(tab as typeof currentTab)}
-                            className={`relative px-4 py-2 rounded-full text-sm font-semibold transition-all
-                ${isActive
-                                    ? // アクティブタブのスタイル（グラデーション）
-                                    "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow"
-                                    : // 非アクティブタブのスタイル
-                                    "bg-white text-gray-700 border border-gray-200 hover:bg-gray-100"
-                                }`}
-                        >
-                            {label}
-                        </button>
-                    );
-                })}
-            </nav>
-
-            {/* --- メインコンテンツ --- */}
-            <main className="px-5 max-w-6xl mx-auto py-6">
-                {/* 1) My Jobs */}
-                {currentTab === "myJobs" && (
-                    <section className="mt-4 space-y-4">
-                        <h2 className="text-xl font-semibold text-gray-700">My Jobs</h2>
-                        {jobs.map((job) => (
-                            <div
-                                key={job.id}
-                                className="flex items-center justify-between p-4 rounded-lg bg-white shadow-sm border"
-                            >
+                    {currentTab === "createJob" && (
+                        <section className="bg-white rounded-lg shadow p-6">
+                            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Create New Job</h2>
+                            <form onSubmit={handleCreateJob} className="space-y-4">
                                 <div>
-                                    <p className="font-medium text-gray-800">{job.title}</p>
-                                    <p className="text-sm text-gray-500">Status: {job.status}</p>
-                                    <p className="text-sm text-gray-500">
-                                        Applicants: {job.applicants}
-                                    </p>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Job Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-indigo-300"
+                                        placeholder="例: フロントエンドエンジニア"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Job Description
+                                    </label>
+                                    <textarea
+                                        rows={4}
+                                        className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-indigo-300"
+                                        placeholder="仕事内容の詳細..."
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Requirements
+                                    </label>
+                                    <textarea
+                                        rows={2}
+                                        className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-indigo-300"
+                                        placeholder="必須スキルや経験..."
+                                    />
                                 </div>
                                 <button
-                                    onClick={() => handleGenerateEmbedCode(job.id)}
-                                    className="px-4 py-2 rounded-md bg-gray-900 text-white text-sm font-medium hover:bg-gray-700"
+                                    type="submit"
+                                    className="px-4 py-2 rounded-md bg-indigo-600 text-white font-semibold hover:bg-indigo-500"
                                 >
-                                    Generate Embed Code
+                                    Create (Stripe課金イメージ)
                                 </button>
-                            </div>
-                        ))}
-                    </section>
-                )}
+                            </form>
+                        </section>
+                    )}
 
-                {/* 2) Create Job */}
-                {currentTab === "createJob" && (
-                    <section className="mt-4">
-                        <h2 className="text-xl font-semibold text-gray-700 mb-2">Create New Job</h2>
-                        <form
-                            onSubmit={handleCreateJob}
-                            className="space-y-5 bg-white p-6 border rounded-lg shadow-sm max-w-lg"
-                        >
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Job Title
-                                </label>
-                                <input
-                                    type="text"
-                                    className="w-full border rounded px-3 py-2"
-                                    placeholder="例: フロントエンドエンジニア"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Job Description
-                                </label>
-                                <textarea
-                                    rows={4}
-                                    className="w-full border rounded px-3 py-2"
-                                    placeholder="仕事内容の詳細..."
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Requirements
-                                </label>
-                                <textarea
-                                    rows={2}
-                                    className="w-full border rounded px-3 py-2"
-                                    placeholder="必須スキルや経験..."
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="px-4 py-2 rounded-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold hover:opacity-90"
-                            >
-                                Create (Stripe課金イメージ)
-                            </button>
-                        </form>
-                    </section>
-                )}
-
-                {/* 3) Analytics */}
-                {currentTab === "analytics" && (
-                    <section className="mt-4">
-                        <h2 className="text-xl font-semibold text-gray-700 mb-2">Analytics</h2>
-                        <div className="bg-white p-6 border rounded-lg shadow-sm max-w-3xl">
-                            <p className="text-gray-600 text-sm mb-4">
-                                応募数や採用数の遷移をグラフで可視化（モックデータ）
-                            </p>
-                            {/* Rechartsによるグラフ描画 */}
+                    {currentTab === "analytics" && (
+                        <section className="bg-white rounded-lg shadow p-6">
+                            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Analytics</h2>
                             <div className="w-full h-64">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={analyticsData}>
@@ -222,17 +201,17 @@ export default function CompanyDashboard() {
                                         <XAxis dataKey="month" stroke="#666" />
                                         <YAxis stroke="#666" />
                                         <Tooltip />
-                                        <Bar dataKey="Applicants" fill="#8884d8" />
+                                        <Bar dataKey="Applicants" fill="#6366F1" />
                                         <Bar dataKey="Hires" fill="#82ca9d" />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
-                        </div>
-                    </section>
-                )}
+                        </section>
+                    )}
+                </div>
             </main>
 
-            {/* --- Embedコード用のモーダル --- */}
+            {/* Embed コードのモーダル（変更なし：見た目のみ微調整） */}
             {embedCode && (
                 <div
                     className="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
@@ -242,7 +221,7 @@ export default function CompanyDashboard() {
                         className="bg-white w-full max-w-md p-6 rounded-lg shadow-md"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h3 className="text-lg font-bold mb-2">Embed Code</h3>
+                        <h3 className="text-lg font-bold mb-2 text-gray-800">Embed Code</h3>
                         <p className="text-sm text-gray-600 mb-4">
                             以下のコードを自社ページに貼り付けてください。
                         </p>

@@ -14,7 +14,7 @@ export default function CreateJob() {
     const handleCreateJob = (e: React.FormEvent) => {
         e.preventDefault();
         // 実際はバックエンドAPIを呼び出して求人作成し、成功後ダッシュボードなどへ飛ばす
-        alert("求人を作成しました（デモ）。従量課金でStripe課金イメージ。");
+        alert("求人を作成しました(デモ)。従量課金でStripe課金イメージ。");
         router.push("/dashboard");
     };
 
