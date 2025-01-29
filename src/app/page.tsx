@@ -39,7 +39,7 @@ export default function LandingPage() {
               Your Job Listings
             </h1>
             <p className="text-gray-600 text-lg sm:text-xl max-w-2xl mb-8">
-              Crossは"Stripe for Jobs"のように求人を簡単に埋め込み、
+              CrossはStripe for Jobsのように求人を簡単に埋め込み、
               応募管理や分析も一括でできる次世代プラットフォームです。
             </p>
             <Link
