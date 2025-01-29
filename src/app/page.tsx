@@ -94,7 +94,7 @@ export default function LandingPage() {
               />
               <PricingCard
                 title="Pro"
-                price="$19 / mo"
+                price="$1 / mo"
                 features={["Unlimited Postings", "Email Support", "Advanced Analytics"]}
               />
               <PricingCard

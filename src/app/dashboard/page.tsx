@@ -89,8 +89,8 @@ export default function CompanyDashboard() {
                         <button
                             onClick={() => setCurrentTab("myJobs")}
                             className={`${currentTab === "myJobs"
-                                    ? "text-indigo-600 font-semibold"
-                                    : "text-gray-600 hover:text-gray-800"
+                                ? "text-indigo-600 font-semibold"
+                                : "text-gray-600 hover:text-gray-800"
                                 }`}
                         >
                             My Jobs
@@ -98,8 +98,8 @@ export default function CompanyDashboard() {
                         <button
                             onClick={() => setCurrentTab("createJob")}
                             className={`${currentTab === "createJob"
-                                    ? "text-indigo-600 font-semibold"
-                                    : "text-gray-600 hover:text-gray-800"
+                                ? "text-indigo-600 font-semibold"
+                                : "text-gray-600 hover:text-gray-800"
                                 }`}
                         >
                             Create Job
@@ -107,8 +107,8 @@ export default function CompanyDashboard() {
                         <button
                             onClick={() => setCurrentTab("analytics")}
                             className={`${currentTab === "analytics"
-                                    ? "text-indigo-600 font-semibold"
-                                    : "text-gray-600 hover:text-gray-800"
+                                ? "text-indigo-600 font-semibold"
+                                : "text-gray-600 hover:text-gray-800"
                                 }`}
                         >
                             Analytics
@@ -131,6 +131,11 @@ export default function CompanyDashboard() {
                                 >
                                     <div>
                                         <p className="font-medium text-gray-800">{job.title}</p>
+                                        <a
+                                            href={`/jobs/${job.id}`}
+                                            className="font-medium text-gray-800 underline hover:text-gray-600">
+                                            {job.title}
+                                        </a>
                                         <p className="text-sm text-gray-500">Status: {job.status}</p>
                                         <p className="text-sm text-gray-500">Applicants: {job.applicants}</p>
                                     </div>
