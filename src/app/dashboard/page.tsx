@@ -13,12 +13,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 
-/**
- * 以前のようなタブ切り替えではなく、
- * Stripe Dashboard 風にサイドバー or シンプル上部ナビを用意して
- * 中身だけ切り替える、というイメージでもOK。
- * ここでは中央に大きめのカードを置くデザイン例を示すわ。
- */
+
 export default function CompanyDashboard() {
     // ------------------------------------------------
     // 状態管理
@@ -66,7 +61,7 @@ export default function CompanyDashboard() {
     // Job作成(ダミー)
     const handleCreateJob = (e: React.FormEvent) => {
         e.preventDefault();
-        alert("新規Jobを作成しました！（Stripe課金イメージ）");
+        alert("新規Jobを作成しました!");
     };
 
     // ------------------------------------------------
@@ -190,7 +185,7 @@ export default function CompanyDashboard() {
                                     type="submit"
                                     className="px-4 py-2 rounded-md bg-indigo-600 text-white font-semibold hover:bg-indigo-500"
                                 >
-                                    Create (Stripe課金イメージ)
+                                    Create (デモ)
                                 </button>
                             </form>
                         </section>
