@@ -1,9 +1,6 @@
-// /src/components/EmbedJobCardClient.tsx
-
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 
 interface JobData {
     id: string;
@@ -18,14 +15,21 @@ interface EmbedJobCardClientProps {
 }
 
 const EmbedJobCardClient: React.FC<EmbedJobCardClientProps> = ({ jobData }) => {
-    const router = useRouter();
 
-    const handleApplyClick = () => {
-        router.push(`/jobs/${jobData.id}`);
+    // 企業ロゴや社名クリック時に親ウィンドウへメッセージを送信
+    const handleRedirect = () => {
+        window.parent.postMessage(
+            { type: "navigate", url: `/jobs/${jobData.id}` },
+            "*"
+        );
     };
 
-    const handleRedirect = () => {
-        router.push(`/jobs/${jobData.id}`);
+    // 応募ボタンクリック時に親ウィンドウへメッセージを送信
+    const handleApplyClick = () => {
+        window.parent.postMessage(
+            { type: "apply", jobId: jobData.id },
+            "*"
+        );
     };
 
     return (
