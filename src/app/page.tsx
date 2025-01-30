@@ -1,8 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function LandingPage() {
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const { type, url, jobId } = event.data;
+      if (type === "navigate" && url) {
+        window.location.href = url;
+      }
+      if (type === "apply" && jobId) {
+        // ...apply action...
+        window.location.href = `/jobs/${jobId}/apply`;
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-white text-gray-900">
       {/* ヘッダー */}
@@ -125,14 +143,16 @@ export default function LandingPage() {
                 style={{
                   width: "400px",
                   height: "250px",
-                  border: "1px solid #ccc",
+                  border: "none",
                   borderRadius: "8px",
                   overflow: "hidden",
                 }}
+                title="Job Embed"
               />
             </div>
           </div>
         </section>
+
 
         {/* FAQセクション(ダミー) */}
         <section id="faq" className="py-16">

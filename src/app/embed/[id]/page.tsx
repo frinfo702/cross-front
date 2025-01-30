@@ -1,5 +1,4 @@
 // src/app/embed/[id]/page.tsx
-
 "use client";
 
 import { useParams } from "next/navigation";
@@ -7,7 +6,8 @@ import { useParams } from "next/navigation";
 export default function EmbedJobCard() {
     const { id } = useParams() || {};
 
-    // 仮データ
+    // Fetch job data based on the ID
+    // For demonstration, using static data
     const jobData = {
         id,
         companyName: "Awesome Company Inc.",
@@ -16,20 +16,29 @@ export default function EmbedJobCard() {
         salary: "¥5,000,000 / year",
     };
 
-    // 応募（詳細ページへ）
+    // Handle Apply Click
     const handleApplyClick = () => {
         if (typeof window !== "undefined") {
-            window.location.href = `/jobs/${jobData.id}`;
+            window.parent.postMessage(
+                { type: "apply", jobId: jobData.id },
+                "*"
+            );
         }
     };
 
     return (
-        <div className="border rounded-lg shadow-md p-4 max-w-sm bg-white font-sans">
-            {/* 企業ロゴ＋社名をクリックで詳細へ */}
+        <div
+            id="embed-container"
+            className="border rounded-lg shadow-md p-4 bg-white font-sans max-w-sm mx-auto"
+        >
+            {/* Company Logo and Name */}
             <div
                 onClick={() => {
                     if (typeof window !== "undefined") {
-                        window.location.href = `/jobs/${jobData.id}`;
+                        window.parent.postMessage(
+                            { type: "navigate", url: `/jobs/${jobData.id}` },
+                            "*"
+                        );
                     }
                 }}
                 className="flex items-center space-x-3 mb-4 cursor-pointer"
@@ -45,11 +54,14 @@ export default function EmbedJobCard() {
                 </div>
             </div>
 
-            {/* ポジション名 & 年収 */}
+            {/* Position Name & Salary */}
             <div
                 onClick={() => {
                     if (typeof window !== "undefined") {
-                        window.location.href = `/jobs/${jobData.id}`;
+                        window.parent.postMessage(
+                            { type: "navigate", url: `/jobs/${jobData.id}` },
+                            "*"
+                        );
                     }
                 }}
                 className="mb-4 cursor-pointer"
@@ -58,7 +70,7 @@ export default function EmbedJobCard() {
                 <p className="text-sm text-gray-600 mt-1">{jobData.salary}</p>
             </div>
 
-            {/* 応募ボタン */}
+            {/* Apply Button */}
             <button
                 onClick={handleApplyClick}
                 className="mt-2 w-full text-center rounded bg-blue-600 text-white px-3 py-2 hover:bg-blue-500 font-semibold"

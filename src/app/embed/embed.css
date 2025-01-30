@@ -1,0 +1,29 @@
+/* src/app/embed/embed.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Additional embed-specific styles can go here */
+:root {
+    --primary-color: #6366f1;
+    /* Tailwind indigo-500 */
+    --secondary-color: #82ca9d;
+    /* Tailwind green-400 */
+    --background-color: #ffffff;
+    --text-color: #1a202c;
+    /* Tailwind gray-800 */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Ensure the embed fills the iframe */
+#embed-container {
+    width: 100%;
+    height: 100%;
+}
